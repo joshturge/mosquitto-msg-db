@@ -131,5 +131,9 @@ mosquitto_plugin_cleanup(void *userdata, struct mosquitto_opt *options,
 
 	mosquitto_log_printf(MOSQ_LOG_DEBUG, "%d: unregistered callback", ret);
 
+	ret = db_con->close(db_con);
+	if (ret == -1)
+		mosquitto_log_printf(MOSQ_LOG_ERR, "%s: %s", db_pathname, strerror(errno));
+
 	return ret;
 }
