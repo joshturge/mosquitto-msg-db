@@ -1,0 +1,39 @@
+mosquitto message database 
+--------------------------
+This project allows MQTT messages to be saved to a key/value database.
+Keys take the form of the MQTT topic followed by an '@' symbol and
+finally a unix timestamp. Example:
+
+b1a5d81be9b6/pump/status@1687502049
+
+The value is the MQTT message payload.
+
+The key/value database is currently btree(3), I may upgrade to redis or
+similar when the time comes.
+
+I have included a program to read the database file and print out all 
+the values in csv format, it is named 'read_db.c'. This is mainly for
+debugging.
+
+Requirements
+------------
+Edit config.mk to match your local setup (the .so is installed into
+the /usr/local namespace by default).
+
+Afterwards enter the following command to build and install the .so (if
+necessary as root):
+
+    make clean install
+
+Running
+-------
+Edit mosquitto.conf(5) and add a plugin directive matching your setup
+(the default plugin file path is 
+/usr/local/lib/mosquitto/mosquitto_msg_db.so). Example:
+
+		plugin /usr/local/lib/mosquitto/mosquitto_msg_db.so
+
+Afterwards you will need to restart the broker, on OpenBSD you would
+run the command (if necessary as root):
+
+		rcctl restart mosquitto
